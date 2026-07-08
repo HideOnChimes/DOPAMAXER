@@ -14,7 +14,7 @@ public class TEMPSceneLogic : MonoBehaviour
 
     public void OnSaveClick()
     {
-        SerializationManager.Save("test", SaveData.current);
+        SerializationManager.Save<SaveData>("test", SaveData.current);
     }
 
     public void UpdateUI()
@@ -24,7 +24,7 @@ public class TEMPSceneLogic : MonoBehaviour
 
     public void OnLoadClick()
     {
-        SaveData.current = (SaveData)SerializationManager.Load(Path.Combine(Application.persistentDataPath, "saves", "test.sav"));
+        SaveData.current = SerializationManager.Load<SaveData>("test");
         UpdateUI();
     }
 }
