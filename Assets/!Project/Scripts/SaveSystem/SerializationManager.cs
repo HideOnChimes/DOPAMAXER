@@ -2,6 +2,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+//TODO: Microsoft Recommended not using BinaryFormatter due to security reasons. Change to a XML based serialization or Json https://learn.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer?view=net-5.0
 public class SerializationManager
 {
     private const bool USE_CRYPTOGRAPHY = false;

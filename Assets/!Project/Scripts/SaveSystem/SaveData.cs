@@ -4,5 +4,16 @@ using UnityEngine;
 public partial class SaveData
 {
     private static SaveData _current;
-    public static SaveData current => _current ??= new SaveData();
+    public static SaveData current
+    {
+        get
+        {
+            return _current ??= new SaveData();
+        }
+
+        set
+        {
+            _current = value;
+        }
+    }
 }
