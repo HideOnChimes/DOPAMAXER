@@ -1,16 +1,13 @@
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using Newtonsoft.Json;
 
-//TODO: Microsoft Recommended not using BinaryFormatter due to security reasons. Change to a XML based serialization or Json https://learn.microsoft.com/en-us/dotnet/api/system.xml.serialization.xmlserializer?view=net-5.0
 public class SerializationManager
 {
     private const bool USE_CRYPTOGRAPHY = false;
-    public static bool Save(string saveName, object saveData)
+    public static bool Save<T>(string saveName, T saveData)
     {
         string saveDataDirectory = Path.Combine(Application.persistentDataPath, "saves");
-
-        BinaryFormatter formatter = GetBinaryFormatter();
 
         if(!Directory.Exists(saveDataDirectory))
         {
@@ -19,40 +16,27 @@ public class SerializationManager
 
         string path = Path.Combine(saveDataDirectory, $"{saveName}.sav");
 
-        FileStream file = File.Create(path);
-        formatter.Serialize(file, saveData);
-        file.Close();
+        string json = JsonConvert.SerializeObject(saveData, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore});
+
+        if (USE_CRYPTOGRAPHY) json = EncryptionUtility.EncryptString(json);
+        File.WriteAllText(path, json);
+
         return true;
     }
 
-    public static object Load(string path)
+    public static T Load<T>(string saveName, string path = null)
     {
+        path ??= Path.Combine(Application.persistentDataPath, "saves");
+        path = Path.Combine(path, $"{saveName}.sav");
         if (!File.Exists(path))
         {
-            return null;
+            return default;
         }
 
-        BinaryFormatter formatter = GetBinaryFormatter();
-
-        FileStream file = File.Open(path, FileMode.Open);
-
-        try
-        {
-            object save = formatter.Deserialize(file);
-            file.Close();
-            return save;
-        }
-        catch
-        {
-            Debug.LogError($"Failed to load file at {path}");
-            file.Close();
-            return null;
-        }
-    }
-
-    public static BinaryFormatter GetBinaryFormatter()
-    {
-        BinaryFormatter formatter = new BinaryFormatter();
-        return formatter;
+        string data = File.ReadAllText(path);
+        if (USE_CRYPTOGRAPHY) data = EncryptionUtility.DecryptString(data);
+        T save = JsonConvert.DeserializeObject<T>(data);
+        
+        return save;
     }
 }
