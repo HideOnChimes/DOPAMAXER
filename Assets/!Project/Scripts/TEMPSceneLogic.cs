@@ -5,26 +5,35 @@ using System.IO;
 public class TEMPSceneLogic : MonoBehaviour
 {
     [SerializeField]
-    private TMP_Text dopamineAmount;
+    private TMP_Text txtScoreAmount;
+    [SerializeField]
+    private TMP_Text txtSaveSystemVersion;
+
+    private void Start()
+    {
+        UpdateUI();
+        txtSaveSystemVersion.text = SaveData.current.saveSystemVersion;
+    }
+
     public void OnDopamineClick()
     {
-        SaveData.current.playerData.dopamine += 1;
+        SaveData.current.playerData.score += 1;
         UpdateUI();
     }
 
     public void OnSaveClick()
     {
-        SerializationManager.Save<SaveData>("test", SaveData.current);
+        SerializationManager.Save<SaveData>("DEMO", SaveData.current);
     }
 
     public void UpdateUI()
     {
-        dopamineAmount.text = $"Dopamines: {SaveData.current.playerData.dopamine}";
+        txtScoreAmount.text = $"Score: {SaveData.current.playerData.score}";
     }
 
     public void OnLoadClick()
     {
-        SaveData.current = SerializationManager.Load<SaveData>("test");
+        SaveData.current = SerializationManager.Load<SaveData>("DEMO");
         UpdateUI();
     }
 }

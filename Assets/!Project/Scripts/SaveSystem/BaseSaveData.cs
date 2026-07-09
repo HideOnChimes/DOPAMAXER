@@ -2,14 +2,14 @@ using System.Xml.Serialization;
 using UnityEngine;
 
 [System.Serializable]
-public partial class SaveData
+public abstract class BaseSaveData<T> where T : BaseSaveData<T>, new()
 {
-    private static SaveData _current;
-    public static SaveData current
+    private static T _current;
+    public static T current
     {
         get
         {
-            return _current ??= new SaveData();
+            return _current ??= new T();
         }
 
         set

@@ -19,5 +19,5 @@ public partial class SaveData
 [System.Serializable]
 public class PlayerData
 {
-    public int dopamine;
+    public int score;
 }
