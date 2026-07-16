@@ -2675,7 +2675,7 @@ MonoBehaviour:
   previousPost: {fileID: 183300751}
   actualPost: {fileID: 615352924}
   nextPost: {fileID: 963893250}
-  animationSpeed: 0.1
+  animationSpeed: 1
   likesMinAndMax: {x: 0, y: 9999}
   commentsMinAndMax: {x: 0, y: 9999}
   replyMinAndMax: {x: 0, y: 9999}

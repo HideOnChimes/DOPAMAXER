@@ -30,7 +30,7 @@ public class Post : MonoBehaviour
         postImage.sprite = postData.postImage;
         postAnimator.speed = animatorSpeed;
         overrideController["PostAnimation"] = postData.postAnimation;
-        postAnimator.SetTrigger("Play");
+        postAnimator.Play("PostAnimation", 0, 0f);
     }
 
 }
@@ -47,11 +47,18 @@ public class PostData
     public PostData(string user, string description, int likes, int comments, int replys, Sprite postImage, AnimationClip postAnimation)
     {
         this.user = user;
+        Debug.Log(this.user);
         this.description = description;
+        Debug.Log(this.description);
         this.likes = likes;
+        Debug.Log(this.likes);
         this.comments = comments;
+        Debug.Log(this.comments);
         this.replys = replys;
+        Debug.Log(this.replys);
         this.postImage = postImage;
+        Debug.Log(this.postImage.name);
         this.postAnimation = postAnimation;
+        Debug.Log(this.postAnimation.name);
     }
 }

@@ -13,28 +13,40 @@ public class FakePostManager : MonoSingleton<FakePostManager>
     public Vector2 likesMinAndMax;
     public Vector2 commentsMinAndMax;
     public Vector2 replyMinAndMax;
-    private FakePost previousPostData, actualPostData, nextPostData;
+    private FakePost previousFakePostData, actualFakePostData, nextFakePostData;
+    private PostData previousPostData, actualPostData, nextPostData;
     private bool previousFirst;
 
-    private void Start()
+    async void Start()
     {
+
         StartScroll();
+
     }
 
 
     async void StartScroll() 
     {
-        nextPostData = await NextScrollScreen();
-        NextScroll();
+        actualFakePostData = await NextScrollScreen();
+        actualPostData = NextPostDataToFakePostData(actualFakePostData);
+        previousFakePostData = await NextScrollScreen();
+        previousPostData = NextPostDataToFakePostData(previousFakePostData);
+        nextFakePostData = await NextScrollScreen();
+        nextPostData = NextPostDataToFakePostData(nextFakePostData);
+
         previousFirst = true;
+
+        SetPost();
 
     }
     public void PreviousScroll()
     {
         if (!previousFirst)
         {
-            actualPostData = previousPostData;
+            nextFakePostData = actualFakePostData;
             nextPostData = actualPostData;
+            actualFakePostData = previousFakePostData;
+            actualPostData = previousPostData;
             previousFirst = true;
             SetPost();
         }
@@ -49,9 +61,12 @@ public class FakePostManager : MonoSingleton<FakePostManager>
     {
         scrollCount += previousFirst ? 0 : 1;
         previousFirst = false;
+        previousFakePostData = actualFakePostData;
         previousPostData = actualPostData;
+        actualFakePostData = nextFakePostData;
         actualPostData = nextPostData;
-        nextPostData = await NextScrollScreen();
+        nextFakePostData = await NextScrollScreen();
+        nextPostData = NextPostDataToFakePostData(nextFakePostData);
         SetPost();
 
     }
@@ -59,16 +74,16 @@ public class FakePostManager : MonoSingleton<FakePostManager>
 
     public void SetPost()
     {
-        previousPost.SetPostData(PostDataToFakePostData(previousPostData), animationSpeed);
-        actualPost.SetPostData(PostDataToFakePostData(actualPostData), animationSpeed);
-        nextPost.SetPostData(PostDataToFakePostData(nextPostData), animationSpeed);
+        previousPost.SetPostData(previousPostData, 0);
+        actualPost.SetPostData(actualPostData, animationSpeed);
+        nextPost.SetPostData(nextPostData, 0);
     }
 
-    public PostData PostDataToFakePostData(FakePost fakePost)
+    public PostData NextPostDataToFakePostData(FakePost fakePost)
     {
         PostData aux = new PostData(
             fakePost.postUsers[Random.Range(0, fakePost.postUsers.Length)],
-            fakePost.postDescriptions[Random.Range(0, fakePost.postUsers.Length)],
+            fakePost.postDescriptions[Random.Range(0, fakePost.postDescriptions.Length)],
             (int)Random.Range(likesMinAndMax.x, likesMinAndMax.y),
             (int)Random.Range(commentsMinAndMax.x, commentsMinAndMax.y),
             (int)Random.Range(replyMinAndMax.x, replyMinAndMax.y),
@@ -79,6 +94,7 @@ public class FakePostManager : MonoSingleton<FakePostManager>
         return aux;
     }
 
+
     async UniTask<FakePost> NextScrollScreen()
     {
         if(fakePosts.Count == 1)
@@ -86,7 +102,7 @@ public class FakePostManager : MonoSingleton<FakePostManager>
             return fakePosts[0];
         }
         FakePost aux = fakePosts[Random.Range(0, fakePosts.Count)];
-        while(aux == actualPost)
+        while(aux == actualFakePostData)
         {
             aux = fakePosts[Random.Range(0, fakePosts.Count)];
             await UniTask.Delay(1);
