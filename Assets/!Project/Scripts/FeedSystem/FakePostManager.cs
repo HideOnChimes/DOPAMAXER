@@ -13,6 +13,7 @@ public class FakePostManager : MonoSingleton<FakePostManager>
     public Vector2 likesMinAndMax;
     public Vector2 commentsMinAndMax;
     public Vector2 replyMinAndMax;
+    public Vector2 sendsMinAndMax;
     private FakePost previousFakePostData, actualFakePostData, nextFakePostData;
     private PostData previousPostData, actualPostData, nextPostData;
     private bool previousFirst;
@@ -87,6 +88,7 @@ public class FakePostManager : MonoSingleton<FakePostManager>
             (int)Random.Range(likesMinAndMax.x, likesMinAndMax.y),
             (int)Random.Range(commentsMinAndMax.x, commentsMinAndMax.y),
             (int)Random.Range(replyMinAndMax.x, replyMinAndMax.y),
+            (int)Random.Range(sendsMinAndMax.x, sendsMinAndMax.y),
             fakePost.previewImage,
             fakePost.video
             );
