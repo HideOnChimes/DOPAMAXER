@@ -9,9 +9,12 @@ public class Post : MonoBehaviour
     public TMP_Text likes;
     public TMP_Text comments;
     public TMP_Text replys;
+    public TMP_Text sends;
     public Image postImage;
     public Animator postAnimator;
+    public Slider videoPercent;
     private AnimatorOverrideController overrideController;
+    private AnimatorStateInfo state;
 
     private void Awake()
     {
@@ -19,18 +22,48 @@ public class Post : MonoBehaviour
         postAnimator.runtimeAnimatorController = overrideController;
     }
 
+    private void Update()
+    {
+
+        if (videoPercent != null)
+        {
+            state = postAnimator.GetCurrentAnimatorStateInfo(0);
+            float percent = Mathf.Repeat(state.normalizedTime, 1f);
+            videoPercent.value = percent;
+        }
+
+    }
+
 
     public void SetPostData(PostData postData, float animatorSpeed)
     {
         user.text = postData.user;
         description.text = postData.description;
-        likes.text = postData.likes.ToString();
-        comments.text = postData.comments.ToString();
-        replys.text = postData.replys.ToString();
+        likes.text = ConvertNumber(postData.likes);
+        comments.text = ConvertNumber(postData.comments);
+        replys.text = ConvertNumber(postData.replys);
+        sends.text = ConvertNumber(postData.sends);
         postImage.sprite = postData.postImage;
         postAnimator.speed = animatorSpeed;
         overrideController["PostAnimation"] = postData.postAnimation;
         postAnimator.Play("PostAnimation", 0, 0f);
+        state = postAnimator.GetCurrentAnimatorStateInfo(0);
+    }
+
+    string ConvertNumber(int number) 
+    {
+        if (number >= 1000000)
+        {
+            return (number / 1000000f).ToString("0.#") + "M";
+        }
+        else if (number >= 9999)
+        {
+            return (number / 1000f).ToString("0") + "K";
+        }
+        else
+        {
+            return number.ToString();
+        }   
     }
 
 }
@@ -42,23 +75,20 @@ public class PostData
     public int likes;
     public int comments;
     public int replys;
+    public int sends;
     public Sprite postImage;
     public AnimationClip postAnimation;
-    public PostData(string user, string description, int likes, int comments, int replys, Sprite postImage, AnimationClip postAnimation)
+    public PostData(string user, string description, int likes, int comments, int replys,int sends, Sprite postImage, AnimationClip postAnimation)
     {
         this.user = user;
-        Debug.Log(this.user);
+        
         this.description = description;
-        Debug.Log(this.description);
+        
         this.likes = likes;
-        Debug.Log(this.likes);
         this.comments = comments;
-        Debug.Log(this.comments);
         this.replys = replys;
-        Debug.Log(this.replys);
+        this.sends = sends;
         this.postImage = postImage;
-        Debug.Log(this.postImage.name);
         this.postAnimation = postAnimation;
-        Debug.Log(this.postAnimation.name);
     }
 }
