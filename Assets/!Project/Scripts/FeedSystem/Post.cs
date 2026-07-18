@@ -44,7 +44,7 @@ public class Post : MonoBehaviour
     }
     public void LikeSpriteButton()
     {
-        if (!isLiked)
+        if (!isLiked && !DotLikeAnim.gameObject.activeInHierarchy)
         {
             DotLikeAnim.gameObject.SetActive(true);
             DotLikeAnim.DORestart();
@@ -52,6 +52,8 @@ public class Post : MonoBehaviour
         }
         else 
         {
+            DotLikeAnim.tween.Complete();
+            DotLikeAnim.gameObject.SetActive(false);
             ChangeSprite("like", isLiked);
         }
         
@@ -79,11 +81,13 @@ public class Post : MonoBehaviour
         }
         isLiked = true;
         likeImage.sprite = postSpriteBank.GetSprite(tag);
+        Debug.Log("Sprite changed to: " + tag);
 
     }
 
     public void OffSprite(string tag)
     {
+        
         if(isLiked)
         {
             currentLikes--;
