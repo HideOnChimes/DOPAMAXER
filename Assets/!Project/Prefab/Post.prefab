@@ -510,34 +510,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7245357478478516764}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 6226566966034879994}
-        m_TargetAssemblyTypeName: DG.Tweening.DOTweenAnimation, DOTweenPro.Scripts
-        m_MethodName: DORestart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 851070035762500382}
         m_TargetAssemblyTypeName: Post, Assembly-CSharp
-        m_MethodName: ChangeSprite
-        m_Mode: 5
+        m_MethodName: LikeSpriteButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1193,6 +1169,7 @@ MonoBehaviour:
   videoPercent: {fileID: 6387162326508100479}
   postSpriteBank: {fileID: 11400000, guid: b2e31b24b044fe74890f64c324cb3ad2, type: 2}
   likeImage: {fileID: 7651854097963086801}
+  DotLikeAnim: {fileID: 6226566966034879994}
 --- !u!114 &1377203126303106970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1918,7 +1895,7 @@ MonoBehaviour:
   tweenTargetIsTargetGO: 1
   delay: 0
   duration: 0.3
-  easeType: 35
+  easeType: 31
   easeCurve:
     serializedVersion: 2
     m_Curve:
@@ -2038,7 +2015,7 @@ MonoBehaviour:
   tweenTargetIsTargetGO: 1
   delay: 0
   duration: 0.3
-  easeType: 6
+  easeType: 31
   easeCurve:
     serializedVersion: 2
     m_Curve:
