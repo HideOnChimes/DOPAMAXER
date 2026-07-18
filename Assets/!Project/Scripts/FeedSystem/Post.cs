@@ -8,13 +8,20 @@ public class Post : MonoBehaviour
     public TMP_Text description;
     public TMP_Text likes;
     public TMP_Text comments;
-    public TMP_Text replys;
+    public TMP_Text reposts;
     public TMP_Text sends;
     public Image postImage;
     public Animator postAnimator;
     public Slider videoPercent;
+    public PostSpriteBank postSpriteBank;
+    public Image likeImage;
     private AnimatorOverrideController overrideController;
     private AnimatorStateInfo state;
+    private bool isLiked;
+    private int currentLikes;
+    private int currentComments;
+    private int currentReposts;
+    private int currentSends;
 
     private void Awake()
     {
@@ -34,15 +41,56 @@ public class Post : MonoBehaviour
 
     }
 
+    public void ChangeSprite(string tag) 
+    {
+        if (!isLiked)
+        {
+            OnSprite(tag);
+        }
+        else 
+        {
+            OffSprite("un" + tag);
+        }
+    }
+
+    public void OnSprite(string tag) 
+    {
+        if (!isLiked) 
+        {
+            currentLikes++;
+            likes.text = ConvertNumber(currentLikes);
+        }
+        isLiked = true;
+        likeImage.sprite = postSpriteBank.GetSprite(tag);
+
+    }
+
+    public void OffSprite(string tag)
+    {
+        if(isLiked)
+        {
+            currentLikes--;
+            likes.text = ConvertNumber(currentLikes);
+        }
+        isLiked = false;
+        likeImage.sprite = postSpriteBank.GetSprite(tag);
+    }
+
+
+
 
     public void SetPostData(PostData postData, float animatorSpeed)
     {
         user.text = postData.user;
         description.text = postData.description;
         likes.text = ConvertNumber(postData.likes);
+        currentLikes = postData.likes;
         comments.text = ConvertNumber(postData.comments);
-        replys.text = ConvertNumber(postData.replys);
+        currentComments = postData.comments;
+        reposts.text = ConvertNumber(postData.reposts);
+        currentReposts = postData.reposts;
         sends.text = ConvertNumber(postData.sends);
+        currentSends = postData.sends;
         postImage.sprite = postData.postImage;
         postAnimator.speed = animatorSpeed;
         overrideController["PostAnimation"] = postData.postAnimation;
@@ -74,11 +122,11 @@ public class PostData
     public string description;
     public int likes;
     public int comments;
-    public int replys;
+    public int reposts;
     public int sends;
     public Sprite postImage;
     public AnimationClip postAnimation;
-    public PostData(string user, string description, int likes, int comments, int replys,int sends, Sprite postImage, AnimationClip postAnimation)
+    public PostData(string user, string description, int likes, int comments, int reposts,int sends, Sprite postImage, AnimationClip postAnimation)
     {
         this.user = user;
         
@@ -86,7 +134,7 @@ public class PostData
         
         this.likes = likes;
         this.comments = comments;
-        this.replys = replys;
+        this.reposts = reposts;
         this.sends = sends;
         this.postImage = postImage;
         this.postAnimation = postAnimation;
