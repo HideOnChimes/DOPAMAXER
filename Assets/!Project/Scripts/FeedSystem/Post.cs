@@ -1,3 +1,4 @@
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ public class Post : MonoBehaviour
     public Slider videoPercent;
     public PostSpriteBank postSpriteBank;
     public Image likeImage;
+    public DOTweenAnimation DotLikeAnim;
     private AnimatorOverrideController overrideController;
     private AnimatorStateInfo state;
     private bool isLiked;
@@ -40,12 +42,29 @@ public class Post : MonoBehaviour
         }
 
     }
-
-    public void ChangeSprite(string tag) 
+    public void LikeSpriteButton()
     {
-        if (!isLiked)
+        if (!isLiked && !DotLikeAnim.gameObject.activeInHierarchy)
+        {
+            DotLikeAnim.gameObject.SetActive(true);
+            DotLikeAnim.DORestart();
+            DotLikeAnim.tween.onComplete = (() => ChangeSprite("like", isLiked));
+        }
+        else 
+        {
+            DotLikeAnim.tween.Complete();
+            DotLikeAnim.gameObject.SetActive(false);
+            ChangeSprite("like", isLiked);
+        }
+        
+    }
+
+    public void ChangeSprite(string tag, bool mode) 
+    {
+        if (!mode)
         {
             OnSprite(tag);
+            
         }
         else 
         {
@@ -62,11 +81,13 @@ public class Post : MonoBehaviour
         }
         isLiked = true;
         likeImage.sprite = postSpriteBank.GetSprite(tag);
+        Debug.Log("Sprite changed to: " + tag);
 
     }
 
     public void OffSprite(string tag)
     {
+        
         if(isLiked)
         {
             currentLikes--;
